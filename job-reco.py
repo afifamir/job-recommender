@@ -17,6 +17,9 @@ def load_data(csv_file_url, chunksize):
 
 # Preprocess data
 def preprocess_data(df):
+    # Drop rows with NaN values in title, abstract, or content columns
+    df = df.dropna(subset=['title', 'abstract', 'content'])
+    
     # Filter out duplicate job IDs
     unique_job_ids = set(df['id'])
     data = df[df['id'].isin(unique_job_ids)]
