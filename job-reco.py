@@ -1,5 +1,6 @@
 import streamlit as st
 import pandas as pd
+import gdown
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 from sklearn.preprocessing import OneHotEncoder
@@ -7,9 +8,10 @@ from scipy.sparse import hstack
 
 # Load data
 @st.cache_data
-def load_data(csv_file, chunksize):
+def load_data(csv_file_url, chunksize):
+    gdown.download(csv_file_url, 'data.csv', quiet=False)
     all_chunks = []
-    for chunk in pd.read_csv(csv_file, chunksize=chunksize):
+    for chunk in pd.read_csv('data.csv', chunksize=chunksize):
         all_chunks.append(chunk)
     return pd.concat(all_chunks, ignore_index=True)
 
@@ -35,10 +37,13 @@ def preprocess_data(df):
 def main():
     st.title('Job Recommendation System')
 
-    # Load data
-    csv_file = "ads_expanded.csv"
+    # Load data from Google Drive
+    csv_file_url = "https://drive.google.com/file/d/1M07tqmbUKqdDf6k6CKjmjB28k5Qjxre2/view?usp=sharing"
+    file_id = csv_file_url.split('/')[-2]
+    download_link = f"https://drive.google.com/uc?id={file_id}"
+    
     chunksize = 20000
-    data = load_data(csv_file, chunksize)
+    data = load_data(download_link, chunksize)
 
     # Preprocess data
     data = preprocess_data(data)
@@ -76,6 +81,7 @@ def main():
         # Display recommended jobs
         st.subheader('Recommended Jobs:')
         st.write(recommended_jobs_details)
+
 
 if __name__ == "__main__":
     main()
