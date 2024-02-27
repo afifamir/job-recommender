@@ -50,5 +50,5 @@ The app loads job data from a CSV file stored on Google Drive. The data is prepr
 
 ## Credits
 
-- This app was created by [Your Name].
+- This app was created by Muhammad 'Afif Amir Husin.
 
